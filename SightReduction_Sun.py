@@ -77,12 +77,12 @@ else:
 outputTable.append([f"Intercept ({direction})",f"{deg_to_dm(Hc-Ho)}"])
 
 if EP_latitude_degrees > 0: # North
-    outputTable.append(["Latitude North",""])
+    #outputTable.append(["Latitude North",""])
     if LHA_of_body_degrees > 180:
-        outputTable.append([" and LHA > 180°: Zn = Z",""])
+        #outputTable.append([" and LHA > 180°: Zn = Z",""])
         Zn = Z
     else:
-        outputTable.append([" and LHA < 180°: Zn = 360° - Z",""])
+        #outputTable.append([" and LHA < 180°: Zn = 360° - Z",""])
         Zn = 360 - Z
 else: # South
     outputTable.append("Latitude South","")
@@ -93,7 +93,8 @@ else: # South
         outputTable.append(" and LHA < 180°: Zn = 180° + Z","")
         Zn = 180 + Z
 
-outputTable.append([f" Z {round(Z)}°, Zn {round(Zn)}°, LoP {round((Zn+90)%360)}°",""])
+#outputTable.append([f" Z {round(Z)}°, Zn {round(Zn)}°, LoP {round((Zn+90)%360)}°",""])
+outputTable.append([f"  Zn {round(Zn)}°, LoP {round((Zn+90)%360)}°",""])
 
 column1_width = 33
 column2_width = 12
