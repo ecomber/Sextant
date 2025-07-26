@@ -75,6 +75,7 @@ else:
     direction = "Away"
 
 outputTable.append([f"Intercept ({direction})",f"{deg_to_dm(Hc-Ho)}"])
+outputTable.append([f"Intercept ({direction})",f"{abs((Hc-Ho)*60):5.2f}nm"])
 
 if EP_latitude_degrees > 0: # North
     #outputTable.append(["Latitude North",""])
@@ -94,7 +95,7 @@ else: # South
         Zn = 180 + Z
 
 #outputTable.append([f" Z {round(Z)}°, Zn {round(Zn)}°, LoP {round((Zn+90)%360)}°",""])
-outputTable.append([f"  Zn {round(Zn)}°, LoP {round((Zn+90)%360)}°",""])
+outputTable.append([f"  Zn (Azimuth) {round(Zn)}°, LoP {round((Zn+90)%360)}°",""])
 
 column1_width = 33
 column2_width = 12
