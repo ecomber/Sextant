@@ -117,13 +117,13 @@ class Sextant(object):
 		 [f"Refraction at {deg_to_dm(Hs)}", f"{deg_to_dm(-refraction_correction)}"])
 		Hs = Hs - refraction_correction
 		self.table.append(["Hs", f"{deg_to_dm(Hs)}"])
-		retStr += f"Semi-diameter                 {deg_to_dm(semi_diameter)}\n"
-		self.jsonDict["Semi-diameter"] = self.semi_diameter
+		retStr += f"Semi-diameter (Almanac)                 {deg_to_dm(semi_diameter)}\n"
+		self.jsonDict["Semi-diameter (Almanac)"] = self.semi_diameter
 		if self.semi_diameter != 0:
-			self.table.append([f"Semi-diameter", f"{deg_to_dm(semi_diameter)}"])
+			self.table.append([f"Semi-diameter (Almanac)", f"{deg_to_dm(semi_diameter)}"])
 			Hs = Hs + self.semi_diameter / 60
 			retStr += f"Hs                           {deg_to_dm(Hs)}\n"
-			self.table.append(["Hs", f"{deg_to_dm(Hs)}"])
+			#self.table.append(["Hs", f"{deg_to_dm(Hs)}"])
 		Ho = Hs
 		retStr += f"Ho                           {deg_to_dm(Ho)}\n"
 		self.jsonDict["Ho"] = Ho
