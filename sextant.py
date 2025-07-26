@@ -104,7 +104,7 @@ class Sextant(object):
 		self.jsonDict["Dip"] = self.dip(self.eye_height)
 		retStr += f"Dip at {self.eye_height}m eye height        {deg_to_dm(-dip_of_horizon)}\n"
 		self.table.append(
-		 [f"Dip at {self.eye_height}m eye height", f"{deg_to_dm(-dip_of_horizon)}"])
+		 [f"Dip at eye height {self.eye_height}m", f"{deg_to_dm(-dip_of_horizon)}"])
 		Hs = Hs - dip_of_horizon
 		retStr += f"Hs                           {deg_to_dm(Hs)}\n"
 		self.table.append(["Hs", f"{deg_to_dm(Hs)}"])
