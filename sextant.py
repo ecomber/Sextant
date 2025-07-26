@@ -89,7 +89,7 @@ class Sextant(object):
 
 		retStr += f"Hs                           {deg_to_dm(self.Hs)}\n"
 		self.table.append(["Sextant:", ""])
-		self.table.append(["Hs", f"{deg_to_dm(self.Hs)}"])
+		self.table.append(["Hs (Height by Sextant)", f"{deg_to_dm(self.Hs)}"])
 
 		retStr += f"Index Error (On - / Off +)    {deg_to_dm(index_error)}\n"
 		self.table.append(
@@ -126,9 +126,9 @@ class Sextant(object):
 			#self.table.append(["Hs", f"{deg_to_dm(Hs)}"])
 		Ho = Hs
 		retStr += f"Ho                           {deg_to_dm(Ho)}\n"
-		self.jsonDict["Ho"] = Ho
+		self.jsonDict["Ho (Height Observed|)"] = Ho
 		retStr += f"Ho decimal degrees           {Ho:0.6f}\n"
-		self.table.append(["Ho", f"{deg_to_dm(Ho)}"])
+		self.table.append(["Ho (Height Observed)", f"{deg_to_dm(Ho)}"])
 		#self.table.append(["Ho as decimal",str(Ho)])
 		return Ho, retStr
 
