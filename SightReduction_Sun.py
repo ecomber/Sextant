@@ -95,10 +95,11 @@ else: # South
 
 outputTable.append([f"  Zn (Azimuth) {round(Zn)}°, LoP {round((Zn+90)%360)}°",""])
 
-column0_width = column1_width = 0
+
 for row in infoTable:
     print(row)
 
+column0_width = column1_width = 0
 for row in mySextant.formattedTable():
     column0_width = max(len(row[0]), column0_width)
     column1_width = max(len(row[1]), column1_width)
