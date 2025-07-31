@@ -1,7 +1,7 @@
 
 Observed Body: Sun
 Observation time 2025-05-29 15:19:28.914876+00:00 UTC
-Calculation time 2025-07-30 05:46:26.035829+00:00 UTC
+Calculation time 2025-07-31 09:41:47.005554+00:00 UTC
 
 Sextant:                                     
 Hs (Height by Sextant)             +50°58.10'
@@ -14,18 +14,18 @@ Hs                                 +50°56.71'
 Semi-diameter (Almanac)             +0°15.80'
 Ho (Height Observed)               +51°12.51'
                                              
-Estimated or Chosen Position:                
-EP Latitude                        +37°00.00'
-EP Longitude                        -9°00.00'
+Chosen Position:                             
+CP Latitude                        +37°00.00'
+CP Longitude                        -9°00.00'
 GHA Sun 2025-05-29 15h (Almanac)   +45°38.10'
 GHA increment at 19m 28s            +4°52.00'
 GHA of body at 15h 19m 28s         +50°30.10'
-LHA of body (GHA + EP Lon)         +41°30.10'
+LHA of body (GHA + CP Lon)         +41°30.10'
 Declination at 15h (Almanac)       +21°43.20'
 Decl incr 0.4 at 19m (Almanac)      +0°00.13'
 Declination of body                +21°43.33'
                                              
-Hc from EP lat, Decl, LHA          +51°06.80'
+Hc from CP lat, Decl, LHA          +51°06.80'
 Ho from sextant                    +51°12.51'
 Intercept (Towards)                 -0°05.71'
 Intercept (Towards)                  5.71 nm 

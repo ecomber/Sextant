@@ -52,20 +52,20 @@ infoTable.append("")
 
 outputTable = []
 outputTable.append(["",""])
-outputTable.append([f"Estimated or Chosen Position:",""])
-outputTable.append([f"EP Latitude",f"{deg_to_dm(EP_latitude_degrees)}",EP_latitude_degrees])
-outputTable.append([f"EP Longitude",f"{deg_to_dm(EP_longitude_degrees)}", EP_longitude_degrees])
+outputTable.append([f"Chosen Position:",""])
+outputTable.append([f"CP Latitude",f"{deg_to_dm(EP_latitude_degrees)}",EP_latitude_degrees])
+outputTable.append([f"CP Longitude",f"{deg_to_dm(EP_longitude_degrees)}", EP_longitude_degrees])
 
 outputTable.append([f"GHA Sun {observation_time.year}-{observation_time.month:02g}-{observation_time.day:02g} {observation_time.hour:02g}h (Almanac)",f"{deg_to_dm(GHA_of_body_at_hour%360)}", GHA_of_body_at_hour])
 
 outputTable.append([f"GHA increment at {observation_time.minute}m {observation_time.second}s ",f"{deg_to_dm(GHA_m_s_increment)}"])
 outputTable.append([f"GHA of body at {observation_time.hour}h {observation_time.minute}m {observation_time.second}s",f"{deg_to_dm(GHA_of_body_degrees%360)}", GHA_of_body_degrees])
-outputTable.append([f"LHA of body (GHA + EP Lon)",f"{deg_to_dm(LHA_of_body_degrees)}", LHA_of_body_degrees])
+outputTable.append([f"LHA of body (GHA + CP Lon)",f"{deg_to_dm(LHA_of_body_degrees)}", LHA_of_body_degrees])
 outputTable.append([f"Declination at {observation_time.hour}h (Almanac)",f"{deg_to_dm(Declination_of_body_at_hour)}"])
 outputTable.append([f"Decl incr {Declination_d_correction} at {observation_time.minute}m (Almanac)",f"{deg_to_dm(Declination_m_increment)}"])
 outputTable.append([f"Declination of body",f"{deg_to_dm(Declination_of_body_degrees)}",Declination_of_body_degrees])
 outputTable.append(["",""])
-outputTable.append([f"Hc from EP lat, Decl, LHA",f"{deg_to_dm(Hc)}",Hc])
+outputTable.append([f"Hc from CP lat, Decl, LHA",f"{deg_to_dm(Hc)}",Hc])
 outputTable.append([f"Ho from sextant",f"{deg_to_dm(Ho)}",Ho])
 
 if Ho > Hc:
