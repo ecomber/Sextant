@@ -1,32 +1,34 @@
 
 Observed Body: Sun
 Observation time 2025-05-29 15:19:28.914876+00:00 UTC
-Calculation time 2025-07-31 09:41:47.005554+00:00 UTC
+Calculation time 2025-07-31 09:58:32.784650+00:00 UTC
 
-Sextant:                                     
-Hs (Height by Sextant)             +50°58.10'
-Index Error (On - / Off +)          +0°02.20'
-Hs                                 +51°00.30'
-Dip at eye height 2.5m              -0°02.78'
-Hs                                 +50°57.52'
-Refraction at +50°57.52'            -0°00.81'
-Hs                                 +50°56.71'
-Semi-diameter (Almanac)             +0°15.80'
-Ho (Height Observed)               +51°12.51'
-                                             
-Chosen Position:                             
-CP Latitude                        +37°00.00'
-CP Longitude                        -9°00.00'
-GHA Sun 2025-05-29 15h (Almanac)   +45°38.10'
-GHA increment at 19m 28s            +4°52.00'
-GHA of body at 15h 19m 28s         +50°30.10'
-LHA of body (GHA + CP Lon)         +41°30.10'
-Declination at 15h (Almanac)       +21°43.20'
-Decl incr 0.4 at 19m (Almanac)      +0°00.13'
-Declination of body                +21°43.33'
-                                             
-Hc from CP lat, Decl, LHA          +51°06.80'
-Ho from sextant                    +51°12.51'
-Intercept (Towards)                 -0°05.71'
-Intercept (Towards)                  5.71 nm 
-  Zn (Azimuth) 259°, LoP 349°                
+Sextant:                                         
+Hs (Height by Sextant)                 +50°58.10'
+Index Error (On - / Off +)              +0°02.20'
+Hs                                     +51°00.30'
+Dip at eye height 2.5m                  -0°02.78'
+Hs                                     +50°57.52'
+Refraction at +50°57.52'                -0°00.81'
+Hs                                     +50°56.71'
+Semi-diameter (Almanac)                 +0°15.80'
+Ho (Height Observed)                   +51°12.51'
+                                                 
+Position of Sun:                                 
+GHA of Sun 2025-05-29 15h (Almanac)    +45°38.10'
+GHA increment at 19m 28s                +4°52.00'
+GHA of Sun at 15h 19m 28s              +50°30.10'
+LHA of Sun (GHA + CP Lon)              +41°30.10'
+Declination at 15h (Almanac)           +21°43.20'
+Decl incr 0.4 at 19m (Almanac)          +0°00.13'
+Declination of Sun                     +21°43.33'
+                                                 
+Chosen Position:                                 
+CP Latitude                            +37°00.00'
+CP Longitude                            -9°00.00'
+                                                 
+Hc calculated from CP lat, Decl, LHA   +51°06.80'
+Ho from sextant                        +51°12.51'
+Intercept (Towards)                     -0°05.71'
+Intercept (Towards)                      5.71 nm 
+  Zn (Azimuth) 259°, LoP 349°                    
