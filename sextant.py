@@ -1,9 +1,6 @@
-import math
-import sys
 import datetime
+import math
 from zoneinfo import ZoneInfo
-
-
 
 
 def deg_to_dm(deg):

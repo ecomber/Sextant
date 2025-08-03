@@ -69,43 +69,43 @@ outputTable.append([f"Hc calculated from CP lat, Decl, LHA",f"{deg_to_dm(Hc)}",H
 outputTable.append([f"Ho from sextant",f"{deg_to_dm(Ho)}",Ho])
 
 if Ho > Hc:
-    direction = "Towards"
+	direction = "Towards"
 else:
-    direction = "Away"
+	direction = "Away"
 
 outputTable.append([f"Intercept ({direction})",f"{deg_to_dm(Hc-Ho)}"])
 outputTable.append([f"Intercept ({direction})",f"{abs((Hc-Ho)*60):5.2f} nm "])
 
 if CP_latitude_degrees > 0: # North
-    #outputTable.append(["Latitude North",""])
-    if LHA_of_body_degrees > 180:
-        #outputTable.append([" and LHA > 180°: Zn = Z",""])
-        Zn = Z
-    else:
-        #outputTable.append([" and LHA < 180°: Zn = 360° - Z",""])
-        Zn = 360 - Z
+	#outputTable.append(["Latitude North",""])
+	if LHA_of_body_degrees > 180:
+		#outputTable.append([" and LHA > 180°: Zn = Z",""])
+		Zn = Z
+	else:
+		#outputTable.append([" and LHA < 180°: Zn = 360° - Z",""])
+		Zn = 360 - Z
 else: # South
-    outputTable.append("Latitude South","")
-    if LHA_of_body_degrees > 180:
-        outputTable.append(" and LHA > 180°: Zn = 180° - Z","")
-        Zn = 180 - Z
-    else:
-        outputTable.append(" and LHA < 180°: Zn = 180° + Z","")
-        Zn = 180 + Z
+	outputTable.append(["Latitude South",""])
+	if LHA_of_body_degrees > 180:
+		outputTable.append([" and LHA > 180°: Zn = 180° - Z",""])
+		Zn = 180 - Z
+	else:
+		outputTable.append([" and LHA < 180°: Zn = 180° + Z",""])
+		Zn = 180 + Z
 
 outputTable.append([f"  Zn (Azimuth) {round(Zn)}°, LoP {round((Zn+90)%360)}°",""])
 
 for row in infoTable:
-    print(row)
+	print(row)
 tables = [mySextant.formattedTable(),outputTable]
 column0_width = column1_width = 0 # get max column widths
 for table in tables:
-    for row in table:
-        column0_width = max(len(row[0]), column0_width)
-        column1_width = max(len(row[1]), column1_width)
+	for row in table:
+		column0_width = max(len(row[0]), column0_width)
+		column1_width = max(len(row[1]), column1_width)
 for table in tables:
-    for row in table:
-        print(row[0].ljust(column0_width + 2), row[1].rjust(column1_width))
+	for row in table:
+		print(row[0].ljust(column0_width + 2), row[1].rjust(column1_width))
 
 if Logging is True:
 	OutFileName = "Logs/" + str(observation_time.strftime("%Y-%m-%d %Hh%Mm%Ss UTC")) + f" Sun.txt"
