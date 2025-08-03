@@ -1,7 +1,7 @@
 
 Observed Body: Sun
 Observation time 2025-05-29 15:19:28.914876+00:00 UTC
-Calculation time 2025-08-03 15:32:58.625544+00:00 UTC
+Calculation time 2025-08-03 20:26:18.170172+00:00 UTC
 
 Sextant:                                         
 Hs (Height by Sextant)                 +50°58.10'
