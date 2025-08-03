@@ -1,7 +1,7 @@
 
 Observed Body: Sun
 Observation time 2025-05-29 15:19:28.914876+00:00 UTC
-Calculation time 2025-07-31 09:58:32.784650+00:00 UTC
+Calculation time 2025-08-03 15:32:58.625544+00:00 UTC
 
 Sextant:                                         
 Hs (Height by Sextant)                 +50°58.10'
@@ -18,7 +18,6 @@ Position of Sun:
 GHA of Sun 2025-05-29 15h (Almanac)    +45°38.10'
 GHA increment at 19m 28s                +4°52.00'
 GHA of Sun at 15h 19m 28s              +50°30.10'
-LHA of Sun (GHA + CP Lon)              +41°30.10'
 Declination at 15h (Almanac)           +21°43.20'
 Decl incr 0.4 at 19m (Almanac)          +0°00.13'
 Declination of Sun                     +21°43.33'
@@ -26,6 +25,7 @@ Declination of Sun                     +21°43.33'
 Chosen Position:                                 
 CP Latitude                            +37°00.00'
 CP Longitude                            -9°00.00'
+LHA of Sun (GHA + CP Lon)              +41°30.10'
                                                  
 Hc calculated from CP lat, Decl, LHA   +51°06.80'
 Ho from sextant                        +51°12.51'
