@@ -51,22 +51,22 @@ infoTable.append("")
 outputTable = []
 outputTable.append(["", ""])
 outputTable.append([f"Position of {observed_body}:", ""])
-outputTable.append([f"GHA of {observed_body} {observation_time.year}-{observation_time.month:02g}-{observation_time.day:02g} {observation_time.hour:02g}h (Almanac)", f"{deg_to_dm(GHA_of_body_at_hour % 360)}",GHA_of_body_at_hour])
+outputTable.append([f"GHA of {observed_body} {observation_time.year}-{observation_time.month:02g}-{observation_time.day:02g} {observation_time.hour:02g}h (Almanac)", f"{deg_to_dm(GHA_of_body_at_hour % 360)}"])
 outputTable.append([f"GHA increment at {observation_time.minute}m {observation_time.second}s ", f"{deg_to_dm(GHA_m_s_increment)}"])
-outputTable.append([f"GHA of {observed_body} at {observation_time.hour}h {observation_time.minute}m {observation_time.second}s", f"{deg_to_dm(GHA_of_body_degrees % 360)}", GHA_of_body_degrees])
+outputTable.append([f"GHA of {observed_body} at {observation_time.hour}h {observation_time.minute}m {observation_time.second}s", f"{deg_to_dm(GHA_of_body_degrees % 360)}"])
 outputTable.append([f"Declination at {observation_time.hour}h (Almanac)", f"{deg_to_dm(Declination_of_body_at_hour)}"])
 outputTable.append([f"Decl incr {Declination_d_correction} at {observation_time.minute}m (Almanac)", f"{deg_to_dm(Declination_m_increment)}"])
-outputTable.append([f"Declination of {observed_body}", f"{deg_to_dm(Declination_of_body_degrees)}", Declination_of_body_degrees])
+outputTable.append([f"Declination of {observed_body}", f"{deg_to_dm(Declination_of_body_degrees)}"])
 
 outputTable.append(["", ""])
 outputTable.append([f"Chosen Position:", ""])
-outputTable.append([f"CP Latitude", f"{deg_to_dm(CP_latitude_degrees)}", CP_latitude_degrees])
-outputTable.append([f"CP Longitude", f"{deg_to_dm(CP_longitude_degrees)}", CP_longitude_degrees])
-outputTable.append([f"LHA of {observed_body} (GHA + CP Lon)", f"{deg_to_dm(LHA_of_body_degrees)}", LHA_of_body_degrees])
+outputTable.append([f"CP Latitude", f"{deg_to_dm(CP_latitude_degrees)}"])#, CP_latitude_degrees])
+outputTable.append([f"CP Longitude", f"{deg_to_dm(CP_longitude_degrees)}"])#, CP_longitude_degrees])
+outputTable.append([f"LHA of {observed_body} (GHA + CP Lon)", f"{deg_to_dm(LHA_of_body_degrees)}"])#, LHA_of_body_degrees])
 
 outputTable.append(["", ""])
-outputTable.append([f"Hc calculated from CP lat, Decl, LHA", f"{deg_to_dm(Hc)}", Hc])
-outputTable.append([f"Ho from sextant", f"{deg_to_dm(Ho)}", Ho])
+outputTable.append([f"Hc calculated from CP lat, Decl, LHA", f"{deg_to_dm(Hc)}"])
+outputTable.append([f"Ho from sextant", f"{deg_to_dm(Ho)}"])
 
 if Ho > Hc:
     direction = "Towards"
@@ -99,6 +99,7 @@ for row in infoTable:
     print(row)
 tables = [mySextant.formattedTable(), outputTable]
 column0_width = column1_width = 0  # get max column widths
+
 for table in tables:
     for row in table:
         column0_width = max(len(row[0]), column0_width)
@@ -106,6 +107,9 @@ for table in tables:
 for table in tables:
     for row in table:
         print(row[0].ljust(column0_width + 2), row[1].rjust(column1_width))
+
+
+
 
 if Logging is True:
     OutFileName = "Logs/" + str(observation_time.strftime("%Y-%m-%d %Hh%Mm%Ss UTC")) + f" Sun.txt"

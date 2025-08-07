@@ -18,16 +18,12 @@ class AstroCalculator(object):
         year = dt.year
         month = dt.month
         day = dt.day + dt.hour / 24 + dt.minute / 1440 + dt.second / 86400
-
         if month <= 2:
             year -= 1
             month += 12
-
         A = math.floor(year / 100)
         B = 2 - A + math.floor(A / 4)
-
         JD = math.floor(365.25 * (year + 4716)) + math.floor(30.6001 * (month + 1)) + day + B - 1524.5
-
         return JD
 
     def greenwich_sidereal_time(self, jd):
@@ -60,24 +56,25 @@ class AstroCalculator(object):
         return math.degrees(Z) % 360, math.degrees(Hc) % 360
 
     def earth_rotation_angle(self, dt):
-        """Earth rotation angle - ERA, measured in radians, is related to UT1 by a simple linear relation:"""
+        """Earth rotation angle - ERA
+        The modern equivalent of Greenwich Sidereal Time (GST), referred to a point called the Celestial Intermediate Origin (CIO) instead of the equinox.
+        The CIO is a point defined not by its position but by its motion, and at present lies very close to the prime meridian of the Geocentric Celestial Reference System (within 0.1 arcsec throughout the 21st century).
+        Unlike GST, which is a complicated function of both UT1 and Terrestrial Time and includes precession and nutation terms, ERA is a simple linear function of UT1 alone."""
+        """Measured in radians, is related to UT1 by a simple linear relation:"""
         """ERA replaces Greenwich Apparent Sidereal Time (GAST)."""
         """https://astronomy.stackexchange.com/questions/53233/how-is-earths-rotation-angle-era-defined-and-measured"""
         """ERA = 2π(0.7790572732640 + 1.00273781191135448 · Tu) radians, where Tu = (Julian UT1 date - 2451545.0) """
-        """The modern equivalent of Greenwich Sidereal Time (GST), referred to a point called the Celestial Intermediate Origin (CIO) instead of the equinox. The CIO is a point defined not by its position but by its motion, and at present lies very close to the prime meridian of the Geocentric Celestial Reference System (within 0.1 arcsec throughout the 21st century). Unlike GST, which is a complicated function of both UT1 and Terrestrial Time and includes precession and nutation terms, ERA is a simple linear function of UT1 alone."""
 
         JD = self.julian_day(dt)
         tu = JD - 2451545.0
-        era = 2 * math.pi * (0.7790572732640 + 1.00273781191135448 * tu)
-        return math.degrees(era)  # changed to degrees from radians
+        era = math.degrees(2 * math.pi * (0.7790572732640 + 1.00273781191135448 * tu))
+        return era
 
 
 if __name__ == '__main__':
     ac = AstroCalculator()
     print(ac)
     now = datetime.datetime.now(ZoneInfo('UTC'))
-
-
     print(f"Now: {now} UTC")
     jd = ac.julian_day(now)
     print(f"Julian Day: {jd}")
