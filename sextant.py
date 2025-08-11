@@ -3,7 +3,13 @@ import datetime
 from zoneinfo import ZoneInfo
 
 
+def sign(x):
+    return -1 if x < 0 else 1
 
+
+def dm_tup_to_deg(tup):
+	s = sign(tup[0])
+	return  s * ( abs(tup[0]) +  abs(tup[1]/60) )
 
 def deg_to_dm(deg):
 	"""Converts decimal degrees to printable D°m.m string

@@ -64,11 +64,9 @@ class AstroCalculator(object):
         """ERA replaces Greenwich Apparent Sidereal Time (GAST)."""
         """https://astronomy.stackexchange.com/questions/53233/how-is-earths-rotation-angle-era-defined-and-measured"""
         """ERA = 2π(0.7790572732640 + 1.00273781191135448 · Tu) radians, where Tu = (Julian UT1 date - 2451545.0) """
-
         JD = self.julian_day(dt)
         tu = JD - 2451545.0
-        era = math.degrees(2 * math.pi * (0.7790572732640 + 1.00273781191135448 * tu))
-        return era
+        return math.degrees(2 * math.pi * (0.7790572732640 + 1.00273781191135448 * tu))
 
 
 if __name__ == '__main__':
