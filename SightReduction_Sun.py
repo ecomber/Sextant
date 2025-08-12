@@ -8,28 +8,28 @@ import astroCalculator
 Logging = False
 
 # Chosen Position for plotting sheet.
-# You could use Dead Reckoning position, but plotting might be awkward.
-# If you use your GPS position it will give your observation error.
+# You could use your Dead Reckoning position, but plotting might be awkward.
+# If you use your GPS position at time of sight the Intercept will be your observation error.
 CP_latitude_degrees = 37
 CP_longitude_degrees = -9
 
-# Time of observation. Time Zone info can be omitted, it is forced to UTC. Can accept mS
+# Time of observation. Always UTC. Time Zone info can be omitted, it is forced to UTC. Can accept mS
 observation_time = datetime.datetime(year=2025, month=5, day=29, hour=15, minute=19, second=28, tzinfo=ZoneInfo('UTC'))
 
-GHA_of_body_at_hour = 45, 38.1 # GHA of Sun on the hour from Almanac (degrees , minutes) sign of minutes is ignored
-Declination_of_body_at_hour = 21, 43.2   # of Observed Body, from Almanac.
-Declination_d_correction = 0.4  # N.B. sign. + ve 21 December to 21 June for Sun, from Almanac.
+GHA_of_body_at_hour = 45, 38.1 # Almanac. GHA of Sun on the hour (degrees , minutes) sign of minutes is ignored
+Declination_of_body_at_hour = 21, 43.2 # Almanac. Decl of Observed Body.
+Declination_d_correction = 0.4  # Almanac. N.B. sign. -ve 21 June to 21 December for Sun.
 
 # GHA and Decl increments are calculated (GHA at 15°/hr) and (Decl at 'd' *  minutes of time)
 # Enter Sun semi-diameter below
 
 mySextant = sextant.Sextant()
-mySextant.Hs = 50, 58.1  # uncorrected sextant reading (degrees , minutes) sign of minutes is ignored
-mySextant.index_error = +2.2  # minutes of arc (On - / Off +)
+mySextant.Hs = 50, 58.1  # Uncorrected sextant reading (degrees , minutes) sign of minutes is ignored
+mySextant.index_error = +2.2  # Minutes of arc (On - / Off +)
 mySextant.eye_height = 2.5  # Cockpit = 2.5 Mast = 3.3
-mySextant.semi_diameter = +15.8  # minutes of arc. Varies, get from Almanac. negative for upper limb
+mySextant.semi_diameter = +15.8  # Almanac. Minutes of arc. Varies. Negative for upper limb.
 
-# end of user observation data
+# end of user observation data. Run the program
 
 if observation_time.tzinfo != ZoneInfo('UTC'):
 	print("Warning - observation_time TZ not was not set to UTC, has now been set to UTC.")

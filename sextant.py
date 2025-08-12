@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 
 
 def sign(x):
-    return -1 if x < 0 else 1
+	return -1 if x < 0 else 1
 
 
 def dm_tup_to_deg(tup):
@@ -56,6 +56,8 @@ class Sextant(object):
 
 	# Atmospheric refraction, see: https://en.wikipedia.org/wiki/Atmospheric_refraction
 	# Unused refraction corrections
+
+	""""
 	def correction_1(self, x):
 		pass
 		# y =-0.0271 * x3  +0.585 * x2 -4.5737 X + 3.8811
@@ -70,7 +72,7 @@ class Sextant(object):
 	def correction_3(self, x):
 		y = -0.0000006 * x*x*x*x + 0.0001 * x*x*x - 0.0052 * x*x - 0.0989 * x -1.096
 		return y
-
+	"""
 	def bennett(self, Ho):
 		# returns refraction correction in degrees
 		# Ho in degrees https://en.wikipedia.org/wiki/Atmospheric_refraction
