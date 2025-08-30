@@ -13,7 +13,7 @@ Logging = False
 CP_latitude_degrees = 37
 CP_longitude_degrees = -9
 
-# Time of observation. Always UTC. Time Zone info can be omitted, it is forced to UTC. Can accept mS
+# Time of observation. Always UTC. If Time Zone info is omitted it is forced to UTC. Can accept mS
 observation_time = datetime.datetime(year=2025, month=5, day=29, hour=15, minute=19, second=28, tzinfo=ZoneInfo('UTC'))
 
 GHA_of_body_at_hour = 45, 38.1 # Almanac. GHA of Sun on the hour (degrees , minutes) sign of minutes is ignored
@@ -33,10 +33,10 @@ mySextant.semi_diameter = +15.8  # Almanac. Minutes of arc. Varies. Negative for
 
 if observation_time.tzinfo != ZoneInfo('UTC'):
 	print("Warning - observation_time TZ not was not set to UTC, has now been set to UTC.")
-	print("Put tzinfo=ZoneInfo('UTC') as the last prameter in the observation_time declaration." )
+	print("Put tzinfo=ZoneInfo('UTC') as the last parameter in the observation_time declaration." )
 	observation_time.replace(tzinfo=ZoneInfo('UTC'))
-# convert tuples to decimal degrees
 
+# convert tuples to decimal degrees
 GHA_of_body_at_hour = dm_tup_to_deg (GHA_of_body_at_hour)
 Declination_of_body_at_hour = dm_tup_to_deg(Declination_of_body_at_hour)
 mySextant.Hs = dm_tup_to_deg(mySextant.Hs)
