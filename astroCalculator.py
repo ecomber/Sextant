@@ -72,6 +72,7 @@ class AstroCalculator(object):
 if __name__ == '__main__':
     ac = AstroCalculator()
     print(ac)
+    print("An example output:")
     now = datetime.datetime.now(ZoneInfo('UTC'))
     print(f"Now: {now} UTC")
     jd = ac.julian_day(now)
