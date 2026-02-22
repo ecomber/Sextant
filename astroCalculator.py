@@ -11,7 +11,8 @@ class AstroCalculator(object):
         # help(self )
         return "Class AstroCalculator(object), astronomical functions for navigation.\n"
 
-    def julian_day(self, dt):
+    @staticmethod
+    def julian_day(dt):
         """Calculate Julian Day from datetime (UTC)"""
         if dt.tzname() != "UTC":
             print(f"Warning: julian_day(self, dt) dt.tzname() is not UTC")
@@ -26,13 +27,15 @@ class AstroCalculator(object):
         JD = math.floor(365.25 * (year + 4716)) + math.floor(30.6001 * (month + 1)) + day + B - 1524.5
         return JD
 
-    def greenwich_sidereal_time(self, jd):
+    @staticmethod
+    def greenwich_sidereal_time(jd):
         """ Greenwich Sidereal Time (GAST) = GHA of Aries in degrees """
         T = (jd - 2451545.0) / 36525.0
         GST = 280.46061837 + 360.98564736629 * (jd - 2451545) + 0.000387933 * T ** 2 - T ** 3 / 38710000
         return GST % 360
 
-    def local_sidereal_time_from_gst(self, gst, longitude):
+    @staticmethod
+    def local_sidereal_time_from_gst(gst, longitude):
         """Calculate Local Sidereal Time (in degrees)"""
         LST = gst + longitude
         return LST % 360
@@ -43,7 +46,8 @@ class AstroCalculator(object):
         lst = self.local_sidereal_time_from_gst(gst, longitude)
         return lst
 
-    def sightReduction(self, EP_latitude_degrees, Declination_of_body_degrees, LHA_of_body_degrees):
+    @staticmethod
+    def sightReduction(EP_latitude_degrees, Declination_of_body_degrees, LHA_of_body_degrees):
         Lat = math.radians(EP_latitude_degrees)
         Dec = math.radians(Declination_of_body_degrees)
         LHA = math.radians(LHA_of_body_degrees)
