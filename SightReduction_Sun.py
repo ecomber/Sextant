@@ -91,8 +91,9 @@ else:
 outputTable.append([f"Intercept ({direction})", f"{deg_to_dm(Hc - Ho)}"])
 outputTable.append([f"Intercept ({direction})", f"{abs((Hc - Ho) * 60):5.2f} nm "])
 
+# calculate Zn (Azimuth) of the observed body depending on N or S hemisphere and LHA
 if CP_latitude_degrees > 0:  # North
-    # outputTable.append(["Latitude North",""])
+    # outputTable.append(["Latitude North",""]) # explanation in output
     if LHA_of_body_degrees > 180:
         # outputTable.append([" and LHA > 180°: Zn = Z",""])
         Zn = Z
@@ -117,7 +118,7 @@ column0_width = max(len(str(row[0])) for row in combined_tables)
 column1_width = max(len(str(row[1])) for row in combined_tables)
 for row in combined_tables:
     print(f"{row[0]:<{column0_width}}  {row[1]:>{column1_width}}")
-        #print(row[0].ljust(column0_width + 2), row[1].rjust(column1_width))
+        #or - print(row[0].ljust(column0_width + 2), row[1].rjust(column1_width))
 
 if Logging is True:
     OutFileName = f"Logs/{str(observation_time.strftime("%Y-%m-%d %Hh%Mm%Ss UTC"))} {observed_body}.txt"
@@ -126,9 +127,4 @@ if Logging is True:
         logfile.write(information_header + "\n")
         for row in combined_tables:
             logfile.write(f"{row[0]:<{column0_width}}  {row[1]:>{column1_width}}\n")
-"""
-        for row in mySextant.table:
-            logfile.write(f"{row[0].ljust(column0_width + 2)}{row[1].rjust(column1_width)}\n")
-        for row in outputTable:
-            logfile.write(f"{row[0].ljust(column0_width + 2)}{row[1].rjust(column1_width)}\n")
-"""
+            # or - logfile.write(f"{row[0].ljust(column0_width + 2)}{row[1].rjust(column1_width)}\n")
