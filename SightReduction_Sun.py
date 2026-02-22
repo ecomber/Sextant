@@ -5,7 +5,7 @@ import astroCalculator
 import sextant
 from sextant import deg_to_dm, dm_tup_to_deg
 
-Logging = False
+Logging = True
 
 # Chosen Position for plotting sheet.
 # You could use your Dead Reckoning position, but plotting might be awkward.
@@ -56,13 +56,11 @@ Declination_of_body_degrees = Declination_of_body_at_hour + Declination_m_increm
 Z, Hc = ac.sightReduction(CP_latitude_degrees, Declination_of_body_degrees, LHA_of_body_degrees)  # Z later corrected to Zn
 
 observed_body = "Sun"
-
-infoTable = []
-infoTable.append("")
-infoTable.append(f"Observed Body: {observed_body}")
-infoTable.append(f"Observation time {observation_time} UTC")
-infoTable.append(f"Calculation time {str(datetime.datetime.now(ZoneInfo('UTC')))} UTC")
-infoTable.append("")
+information_header = f"""
+Observed Body: {observed_body}
+Observation time {observation_time} UTC
+Calculation time {str(datetime.datetime.now(ZoneInfo('UTC')))} UTC
+"""
 
 outputTable = []
 outputTable.append(["", ""])
@@ -112,26 +110,25 @@ else:  # South
 
 outputTable.append([f"  Zn (Azimuth) {round(Zn)}°, LoP {round((Zn + 90) % 360)}°", ""])
 
-for row in infoTable:
-    print(row)
-tables = [mySextant.formattedTable(), outputTable]
-column0_width = column1_width = 0  # get max column widths
+print(information_header)
+combined_tables = mySextant.table + outputTable
 
-for table in tables:
-    for row in table:
-        column0_width = max(len(row[0]), column0_width)
-        column1_width = max(len(row[1]), column1_width)
-for table in tables:
-    for row in table:
-        print(row[0].ljust(column0_width + 2), row[1].rjust(column1_width))
+column0_width = max(len(str(row[0])) for row in combined_tables)
+column1_width = max(len(str(row[1])) for row in combined_tables)
+for row in combined_tables:
+    print(f"{row[0]:<{column0_width}}  {row[1]:>{column1_width}}")
+        #print(row[0].ljust(column0_width + 2), row[1].rjust(column1_width))
 
 if Logging is True:
-    OutFileName = "Logs/" + str(observation_time.strftime("%Y-%m-%d %Hh%Mm%Ss UTC")) + f" Sun.txt"
+    OutFileName = f"Logs/{str(observation_time.strftime("%Y-%m-%d %Hh%Mm%Ss UTC"))} {observed_body}.txt"
     # ':' not permitted in filename
     with open(OutFileName, "w", encoding="utf-8") as logfile:
-        for row in infoTable:
-            logfile.write(row + "\n")
-        for row in mySextant.formattedTable():
+        logfile.write(information_header + "\n")
+        for row in combined_tables:
+            logfile.write(f"{row[0]:<{column0_width}}  {row[1]:>{column1_width}}\n")
+"""
+        for row in mySextant.table:
             logfile.write(f"{row[0].ljust(column0_width + 2)}{row[1].rjust(column1_width)}\n")
         for row in outputTable:
             logfile.write(f"{row[0].ljust(column0_width + 2)}{row[1].rjust(column1_width)}\n")
+"""
