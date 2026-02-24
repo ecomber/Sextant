@@ -47,17 +47,37 @@ class AstroCalculator(object):
         return lst
 
     @staticmethod
-    def sightReduction(EP_latitude_degrees, Declination_of_body_degrees, LHA_of_body_degrees):
-        Lat = math.radians(EP_latitude_degrees)
-        Dec = math.radians(Declination_of_body_degrees)
-        LHA = math.radians(LHA_of_body_degrees)
-        #  sin_Hc = math.sin(Lat) * math.sin(Dec) + math.cos(Lat) * math.cos(Dec) * math.cos(LHA)
-        Hc = math.asin(math.sin(Lat) * math.sin(Dec) + math.cos(Lat) * math.cos(Dec) * math.cos(LHA))
-        # wrong? cos_Z = (math.sin(Dec)/(math.cos(Hc)*math.cos(Lat)))-(math.tan(Hc)*math.tan(Lat))
-        cos_Z = (math.sin(Dec) - math.sin(Hc) * math.sin(Lat)) / (math.cos(Hc) * math.cos(Lat))
+    def sightReduction(CP_latitude_degrees, Declination_of_body_degrees, LHA_of_body_degrees):
+        Lat_of_CP = math.radians(CP_latitude_degrees)
+        Dec_of_body = math.radians(Declination_of_body_degrees)
+        LHA_of_body = math.radians(LHA_of_body_degrees)
+        #  sin_Hc = math.sin(Lat_of_CP) * math.sin(Dec) + math.cos(Lat_of_CP) * math.cos(Dec) * math.cos(LHA_of_body)
+        Hc = math.asin(math.sin(Lat_of_CP) * math.sin(Dec_of_body) + math.cos(Lat_of_CP) * math.cos(Dec_of_body) * math.cos(LHA_of_body))
+        # wrong? cos_Z = (math.sin(Dec)/(math.cos(Hc)*math.cos(Lat_of_CP)))-(math.tan(Hc)*math.tan(Lat_of_CP))
+        cos_Z = (math.sin(Dec_of_body) - math.sin(Hc) * math.sin(Lat_of_CP)) / (math.cos(Hc) * math.cos(Lat_of_CP))
         Z = math.acos(cos_Z)
         # return (360-math.degrees(Z))%360, math.degrees(Hc)%360
-        return math.degrees(Z) % 360, math.degrees(Hc) % 360
+
+        # calculate Zn (Azimuth) of the observed body depending on N or S hemisphere and LHA_of_body
+        # needs to be converted to radians or v.v. depending on choice
+        if Lat_of_CP > 0:  # North
+            # outputTable.append(["Latitude North",""]) # explanation in output
+            if LHA_of_body > math.pi: # > 180 deg
+                # outputTable.append([" and LHA_of_body > 180°: Zn = Z",""])
+                Zn = Z
+            else:
+                # outputTable.append([" and LHA_of_body < 180°: Zn = 360° - Z",""])
+                Zn = 2*math.pi - Z # 360 deg
+        else:  # South
+            #outputTable.append(["Latitude South", ""])
+            if LHA_of_body > math.pi: # > 180 deg
+                #outputTable.append([" and LHA_of_body > 180°: Zn = 180° - Z", ""])
+                Zn = math.pi - Z # 180
+            else:
+                #outputTable.append([" and LHA_of_body < 180°: Zn = 180° + Z", ""])
+                Zn = math.pi + Z # 180
+
+        return math.degrees(Hc) % 360, math.degrees(Z) % 360,  math.degrees(Zn) % 360
 
     def earth_rotation_angle(self, dt):
         """Earth rotation angle - ERA

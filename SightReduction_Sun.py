@@ -1,15 +1,15 @@
 import datetime
 from zoneinfo import ZoneInfo
 
-import astroCalculator
+from astroCalculator import AstroCalculator
 import sextant
 from sextant import deg_to_dm, dm_tup_to_deg
 
 Logging = True
 
-# Chosen Position for plotting sheet.
+# Chosen Position CP for plotting sheet.
 # You could use your Dead Reckoning position, but plotting might be awkward.
-# If you use your GPS position at time of sight the Intercept will be your observation error.
+# If you use your GPS position at time of sight a CP the Intercept will be your observation error.
 CP_latitude_degrees = 37
 CP_longitude_degrees = -9
 
@@ -29,7 +29,7 @@ mySextant = sextant.Sextant()
 mySextant.Hs = 50, 58.1  # Uncorrected sextant reading (degrees , minutes) sign of minutes is ignored
 mySextant.index_error = +2.2  # Minutes of arc (On - / Off +)
 mySextant.eye_height = 2.5  # Cockpit = 2.5 Mast = 3.3
-mySextant.semi_diameter = +15.8  # Almanac. Minutes of arc. Varies. Negative for upper limb.
+mySextant.semi_diameter = +15.8  # Almanac. Sun. Minutes of arc. Varies. Negative for upper limb.
 
 # end of user observation data. Run the program with:  >python3 SightReduction_Sun.py [ >Output.txt ]
 
@@ -42,7 +42,7 @@ if observation_time.tzinfo != ZoneInfo('UTC'):
 GHA_of_body_at_hour = dm_tup_to_deg(GHA_of_body_at_hour)
 Declination_of_body_at_hour = dm_tup_to_deg(Declination_of_body_at_hour)
 mySextant.Hs = dm_tup_to_deg(mySextant.Hs)
-ac = astroCalculator.AstroCalculator()
+
 mySextant.Calculate()
 Ho = mySextant.Ho()
 
@@ -53,14 +53,13 @@ LHA_of_body_degrees = (GHA_of_body_degrees + CP_longitude_degrees + 360) % 360
 Declination_m_increment = observation_time.minute * Declination_d_correction_per_hour / 3600  # specified in minutes of arc
 Declination_of_body_degrees = Declination_of_body_at_hour + Declination_m_increment
 
-Z, Hc = ac.sightReduction(CP_latitude_degrees, Declination_of_body_degrees, LHA_of_body_degrees)  # Z later corrected to Zn
+Hc, Z, Zn = AstroCalculator.sightReduction(CP_latitude_degrees, Declination_of_body_degrees, LHA_of_body_degrees)  # Z later corrected to Zn
 
 observed_body = "Sun"
-information_header = f"""
-Observed Body: {observed_body}
-Observation time {observation_time} UTC
-Calculation time {str(datetime.datetime.now(ZoneInfo('UTC')))} UTC
-"""
+information_header = f"""Observed Body: {observed_body}
+	Observation time {str(observation_time)[:19]} UTC
+	Calculation time {str(datetime.datetime.now(ZoneInfo('UTC')))[:19]} UTC
+	"""
 
 outputTable = []
 outputTable.append(["", ""])
@@ -68,7 +67,7 @@ outputTable.append([f"Position of {observed_body}:", ""])
 outputTable.append(
     [f"GHA of {observed_body} {observation_time.year}-{observation_time.month:02g}-{observation_time.day:02g} {observation_time.hour:02g}h (Almanac)", f"{deg_to_dm(GHA_of_body_at_hour % 360)}"])
 outputTable.append([f"GHA increment at {observation_time.minute}m {observation_time.second}s ", f"{deg_to_dm(GHA_m_s_increment)}"])
-outputTable.append([f"GHA of {observed_body} at {observation_time.hour}h {observation_time.minute}m {observation_time.second}s", f"{deg_to_dm(GHA_of_body_degrees % 360)}"])
+outputTable.append([f"GHA of {observed_body} at {observation_time.hour}h {observation_time.minute}m {observation_time.second}s", f"{deg_to_dm(GHA_of_body_degrees % 360)}"])  
 outputTable.append([f"Declination at {observation_time.hour}h (Almanac)", f"{deg_to_dm(Declination_of_body_at_hour)}"])
 outputTable.append([f"Decl incr {Declination_d_correction_per_hour}'/hr at {observation_time.minute}m (Almanac)", f"{deg_to_dm(Declination_m_increment)}"])
 outputTable.append([f"Declination of {observed_body}", f"{deg_to_dm(Declination_of_body_degrees)}"])
@@ -91,24 +90,6 @@ else:
 outputTable.append([f"Intercept ({direction})", f"{deg_to_dm(Hc - Ho)}"])
 outputTable.append([f"Intercept ({direction})", f"{abs((Hc - Ho) * 60):5.2f} nm "])
 
-# calculate Zn (Azimuth) of the observed body depending on N or S hemisphere and LHA
-if CP_latitude_degrees > 0:  # North
-    # outputTable.append(["Latitude North",""]) # explanation in output
-    if LHA_of_body_degrees > 180:
-        # outputTable.append([" and LHA > 180°: Zn = Z",""])
-        Zn = Z
-    else:
-        # outputTable.append([" and LHA < 180°: Zn = 360° - Z",""])
-        Zn = 360 - Z
-else:  # South
-    outputTable.append(["Latitude South", ""])
-    if LHA_of_body_degrees > 180:
-        outputTable.append([" and LHA > 180°: Zn = 180° - Z", ""])
-        Zn = 180 - Z
-    else:
-        outputTable.append([" and LHA < 180°: Zn = 180° + Z", ""])
-        Zn = 180 + Z
-
 outputTable.append([f"  Zn (Azimuth) {round(Zn)}°, LoP {round((Zn + 90) % 360)}°", ""])
 
 print(information_header)
@@ -121,8 +102,8 @@ for row in combined_tables:
         #or - print(row[0].ljust(column0_width + 2), row[1].rjust(column1_width))
 
 if Logging is True:
-    OutFileName = f"Logs/{str(observation_time.strftime("%Y-%m-%d %Hh%Mm%Ss UTC"))} {observed_body}.txt"
-    # ':' not permitted in filename
+    OutFileName = f"Logs/{str(observation_time.strftime('%Y-%m-%d %Hh%Mm%Ss UTC'))} {observed_body}.txt"
+    # hms because ':' is not permitted in filename
     with open(OutFileName, "w", encoding="utf-8") as logfile:
         logfile.write(information_header + "\n")
         for row in combined_tables:
