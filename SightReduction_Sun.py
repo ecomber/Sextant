@@ -61,26 +61,16 @@ information_header = f"""Observed Body: {observed_body}
 	Calculation time {str(datetime.datetime.now(ZoneInfo('UTC')))[:19]} UTC
 	"""
 
-outputTable = []
-outputTable.append(["", ""])
-outputTable.append([f"Position of {observed_body}:", ""])
-outputTable.append(
-    [f"GHA of {observed_body} {observation_time.year}-{observation_time.month:02g}-{observation_time.day:02g} {observation_time.hour:02g}h (Almanac)", f"{deg_to_dm(GHA_of_body_at_hour % 360)}"])
-outputTable.append([f"GHA increment at {observation_time.minute}m {observation_time.second}s ", f"{deg_to_dm(GHA_m_s_increment)}"])
-outputTable.append([f"GHA of {observed_body} at {observation_time.hour}h {observation_time.minute}m {observation_time.second}s", f"{deg_to_dm(GHA_of_body_degrees % 360)}"])  
-outputTable.append([f"Declination at {observation_time.hour}h (Almanac)", f"{deg_to_dm(Declination_of_body_at_hour)}"])
-outputTable.append([f"Decl incr {Declination_d_correction_per_hour}'/hr at {observation_time.minute}m (Almanac)", f"{deg_to_dm(Declination_m_increment)}"])
-outputTable.append([f"Declination of {observed_body}", f"{deg_to_dm(Declination_of_body_degrees)}"])
-
-outputTable.append(["", ""])
-outputTable.append([f"Chosen Position:", ""])
-outputTable.append([f"CP Latitude", f"{deg_to_dm(CP_latitude_degrees)}"])  # , CP_latitude_degrees])
-outputTable.append([f"CP Longitude", f"{deg_to_dm(CP_longitude_degrees)}"])  # , CP_longitude_degrees])
-outputTable.append([f"LHA of {observed_body} (GHA + CP Lon)", f"{deg_to_dm(LHA_of_body_degrees)}"])  # , LHA_of_body_degrees])
-
-outputTable.append(["", ""])
-outputTable.append([f"Hc calculated from CP lat, Decl, LHA", f"{deg_to_dm(Hc)}"])
-outputTable.append([f"Ho from sextant", f"{deg_to_dm(Ho)}"])
+outputTable = [["", ""],
+   [f"Position of {observed_body}:", ""],
+   [f"GHA of {observed_body} {observation_time.year}-{observation_time.month:02g}-{observation_time.day:02g} {observation_time.hour:02g}h (Almanac)",f"{deg_to_dm(GHA_of_body_at_hour % 360)}"],
+   [f"GHA increment at {observation_time.minute}m {observation_time.second}s ", f"{deg_to_dm(GHA_m_s_increment)}"],
+   [f"GHA of {observed_body} at {observation_time.hour}h {observation_time.minute}m {observation_time.second}s", f"{deg_to_dm(GHA_of_body_degrees % 360)}"],
+   [f"Declination at {observation_time.hour}h (Almanac)", f"{deg_to_dm(Declination_of_body_at_hour)}"],
+   [f"Decl incr {Declination_d_correction_per_hour}'/hr at {observation_time.minute}m (Almanac)", f"{deg_to_dm(Declination_m_increment)}"],
+   [f"Declination of {observed_body}", f"{deg_to_dm(Declination_of_body_degrees)}"], ["", ""], [f"Chosen Position:", ""], [f"CP Latitude", f"{deg_to_dm(CP_latitude_degrees)}"],
+   [f"CP Longitude", f"{deg_to_dm(CP_longitude_degrees)}"], [f"LHA of {observed_body} (GHA + CP Lon)", f"{deg_to_dm(LHA_of_body_degrees)}"], ["", ""],
+   [f"Hc calculated from CP lat, Decl, LHA", f"{deg_to_dm(Hc)}"], [f"Ho from sextant", f"{deg_to_dm(Ho)}"]]
 
 if Ho > Hc:
     direction = "Towards"
@@ -89,14 +79,13 @@ else:
 
 outputTable.append([f"Intercept ({direction})", f"{deg_to_dm(Hc - Ho)}"])
 outputTable.append([f"Intercept ({direction})", f"{abs((Hc - Ho) * 60):5.2f} nm "])
-
 outputTable.append([f"  Zn (Azimuth) {round(Zn)}°, LoP {round((Zn + 90) % 360)}°", ""])
 
-print(information_header)
 combined_tables = mySextant.table + outputTable
-
 column0_width = max(len(str(row[0])) for row in combined_tables)
 column1_width = max(len(str(row[1])) for row in combined_tables)
+
+print(information_header)
 for row in combined_tables:
     print(f"{row[0]:<{column0_width}}  {row[1]:>{column1_width}}")
         #or - print(row[0].ljust(column0_width + 2), row[1].rjust(column1_width))

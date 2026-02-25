@@ -9,7 +9,7 @@ class AstroCalculator(object):
 
     def __str__(self):
         # help(self )
-        return "Class AstroCalculator(object), astronomical functions for navigation.\n"
+        return "Class AstroCalculator(object), astronomical functions for navigation."
 
     @staticmethod
     def julian_day(dt):
@@ -102,7 +102,8 @@ if __name__ == '__main__':
     jd = ac.julian_day(now)
     print(f"Julian Day: {jd}")
     gst = ac.greenwich_sidereal_time(jd)
-    print(f"GST {gst}°")
+    print(f"GST {gst:.2f}°")
     print(f"GST {sextant.deg_to_dm(gst)}")
+    print(f"LST at 08°W: {sextant.deg_to_dm(ac.local_sidereal_time_from_gst(gst, -8))}")
     era = ac.earth_rotation_angle(now)
     print(f"Earth rotation Angle {sextant.deg_to_dm(era % 360)}")
