@@ -8,7 +8,6 @@ import sextant
 class AstroCalculator(object):
 
     def __str__(self):
-        # help(self )
         return "Class AstroCalculator(object), astronomical functions for navigation."
 
     @staticmethod
@@ -56,12 +55,11 @@ class AstroCalculator(object):
         # wrong? cos_Z = (math.sin(Dec)/(math.cos(Hc)*math.cos(Lat_of_CP)))-(math.tan(Hc)*math.tan(Lat_of_CP))
         cos_Z = (math.sin(Dec_of_body) - math.sin(Hc) * math.sin(Lat_of_CP)) / (math.cos(Hc) * math.cos(Lat_of_CP))
         Z = math.acos(cos_Z)
-        # return (360-math.degrees(Z))%360, math.degrees(Hc)%360
-
-        # calculate Zn (Azimuth) of the observed body depending on N or S hemisphere and LHA_of_body
-        # needs to be converted to radians or v.v. depending on choice
+        # We can return Z and Hc: return (360-math.degrees(Z))%360, math.degrees(Hc)%360
+        # or calculate Zn (Azimuth) of the observed body depending on N or S hemisphere and LHA_of_body
+        # Continue calculations in radians, output in degrees:
         if Lat_of_CP > 0:  # North
-            # outputTable.append(["Latitude North",""]) # explanation in output
+            # outputTable.append(["Latitude North",""]) # give explanation in output
             if LHA_of_body > math.pi: # > 180 deg
                 # outputTable.append([" and LHA_of_body > 180°: Zn = Z",""])
                 Zn = Z
@@ -76,7 +74,6 @@ class AstroCalculator(object):
             else:
                 #outputTable.append([" and LHA_of_body < 180°: Zn = 180° + Z", ""])
                 Zn = math.pi + Z # 180
-
         return math.degrees(Hc) % 360, math.degrees(Z) % 360,  math.degrees(Zn) % 360
 
     def earth_rotation_angle(self, dt):

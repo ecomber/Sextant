@@ -32,13 +32,16 @@ class Sextant(object):
         self.table = []
 
     def __str__(self):
+        self.Calculate()
         return str(self.table)
 
-    def dip(self, eye_height):
+    @staticmethod
+    def dip(eye_height):
         # Correction for dip of horizon, returns dip in degrees
         return 1.76 * math.sqrt(eye_height) / 60
 
-    def atmospheric_refraction_bennett(self, Ho):
+    @staticmethod
+    def atmospheric_refraction_bennett(Ho):
         """ Correction for atmospheric refraction, see: https://en.wikipedia.org/wiki/Atmospheric_refraction
         Ho input in degrees
         returns refraction correction in degrees"""
@@ -83,18 +86,18 @@ class Sextant(object):
 
 
 if __name__ == '__main__':
-    pass
-    freib = Sextant()
-    freib.index_error = +2.1
-    freib.eye_height = 2.5
-    freib.Hs = 29 + 36.8 / 60
-    freib.semi_diameter = 15.8
-    freib.Calculate()
     print(f"Sextant example output.")
     print(f"Dip is 1.76 * sqrt(eye_height_meters) / 60")
     print(f"Refraction is Bennett's formula https://en.wikipedia.org/wiki/Atmospheric_refraction")
 
-    column0_width = max(len(str(row[0])) for row in freib.table)
-    column1_width = max(len(str(row[1])) for row in freib.table)
-    for row in freib.table:
+    freiberger = Sextant()
+    freiberger.index_error = +2.1
+    freiberger.eye_height = 2.5
+    freiberger.Hs = 29 + 36.8 / 60
+    freiberger.semi_diameter = 15.8
+    freiberger.Calculate()
+
+    column0_width = max(len(str(row[0])) for row in freiberger.table)
+    column1_width = max(len(str(row[1])) for row in freiberger.table)
+    for row in freiberger.table:
         print(f"{row[0]:<{column0_width}}  {row[1]:>{column1_width}}")

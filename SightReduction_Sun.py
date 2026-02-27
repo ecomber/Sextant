@@ -46,7 +46,7 @@ mySextant.Hs = dm_tup_to_deg(mySextant.Hs)
 mySextant.Calculate()
 Ho = mySextant.Ho()
 
-GHA_m_s_increment = observation_time.minute / 4 + observation_time.second / 240  # e.g. 4 arc' in 1 minute of time
+GHA_m_s_increment = observation_time.minute / 4 + observation_time.second / 240  # e.g. 4 arc′ in 1 minute of time
 GHA_of_body_degrees = GHA_of_body_at_hour + GHA_m_s_increment
 
 LHA_of_body_degrees = (GHA_of_body_degrees + CP_longitude_degrees + 360) % 360
