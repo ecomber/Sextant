@@ -88,13 +88,11 @@ column1_width = max(len(str(row[1])) for row in combined_tables)
 print(information_header)
 for row in combined_tables:
     print(f"{row[0]:<{column0_width}}  {row[1]:>{column1_width}}")
-        #or - print(row[0].ljust(column0_width + 2), row[1].rjust(column1_width))
 
 if Logging is True:
     OutFileName = f"Logs/{str(observation_time.strftime('%Y-%m-%d %Hh%Mm%Ss UTC'))} {observed_body}.txt"
-    # hms because ':' is not permitted in filename
+    # In 'hms' format because ':' is not permitted in filename
     with open(OutFileName, "w", encoding="utf-8") as logfile:
         logfile.write(information_header + "\n")
         for row in combined_tables:
             logfile.write(f"{row[0]:<{column0_width}}  {row[1]:>{column1_width}}\n")
-            # or - logfile.write(f"{row[0].ljust(column0_width + 2)}{row[1].rjust(column1_width)}\n")

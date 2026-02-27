@@ -1,6 +1,4 @@
 import math
-import datetime
-from zoneinfo import ZoneInfo
 
 
 def sign(x):
@@ -9,21 +7,11 @@ def sign(x):
 
 def dm_tup_to_deg(tup):
     s = sign(tup[0])
-    return  s * ( abs(tup[0]) +  abs(tup[1]/60) )
+    return s * (abs(tup[0]) + abs(tup[1] / 60))
+
 
 def deg_to_dm(deg):
-    """Converts decimal degrees to printable D°m.m string
-
-    Parameters
-    ----------
-    deg: float
-    Decimal degrees
-
-    Returns
-    -------
-    str :
-    degrees as printable string
-    """
+    """Converts decimal degrees to printable D°m.m string"""
     if deg < 0:
         sign = "-"
     else:
@@ -31,8 +19,7 @@ def deg_to_dm(deg):
     decimals, number = math.modf(deg)
     d = int(number)
     m = decimals * 60
-    #return f"{sign}{abs(d)}°{round(abs(m), 2):05.02f}'".rjust(8)
-    return f"{sign}{abs(d)}°{abs(m):05.02f}′".rjust(8) # UNICODE ′ (PRIME) char, not apostrophe
+    return f"{sign}{abs(d)}°{abs(m):05.02f}′".rjust(8)  # UNICODE ′ (PRIME) char, not apostrophe
 
 
 class Sextant(object):
@@ -42,104 +29,57 @@ class Sextant(object):
         self.eye_height = 0
         self.Hs = 0
         self.semi_diameter = 0
-        self.jsonDict = {}
         self.table = []
 
     def __str__(self):
-        #value, string = self.Calculate()
-        #return string
         return str(self.table)
 
     def dip(self, eye_height):
         # Correction for dip of horizon, returns dip in degrees
         return 1.76 * math.sqrt(eye_height) / 60
 
-    # Atmospheric refraction, see: https://en.wikipedia.org/wiki/Atmospheric_refraction
-    # Unused refraction corrections
-
-    """"
-    def correction_1(self, x):
-        pass
-        # y =-0.0271 * x3  +0.585 * x2 -4.5737 X + 3.8811
-        # y = -0.0271 * pow(x, 3) + 0.585 * pow(x, 2) - 4.5737 * x + 3.8811
-        y = -0.0271 * x*x*x + 0.585 * x*x - 4.5737 * x + 3.8811
-        return y
-        
-    def correction_2(self, x):
-        y = (-0.027097902097902 * x*x*x) + (0.585039960039961 * x*x)  - (4.57367632367633 * x) + 3.8811188811189
-        return y
-        
-    def correction_3(self, x):
-        y = -0.0000006 * x*x*x*x + 0.0001 * x*x*x - 0.0052 * x*x - 0.0989 * x -1.096
-        return y
-    """
-    def bennett(self, Ho):
-        # returns refraction correction in degrees
-        # Ho in degrees https://en.wikipedia.org/wiki/Atmospheric_refraction
+    def atmospheric_refraction_bennett(self, Ho):
+        """ Correction for atmospheric refraction, see: https://en.wikipedia.org/wiki/Atmospheric_refraction
+        Ho input in degrees
+        returns refraction correction in degrees"""
         return (1 / math.tan(math.radians(Ho + (7.31 / (Ho + 4.4))))) / 60
 
-    def formattedTable(self):
-        #self.Calculate()
-        return self.table
-
     def Ho(self):
-        value, string = self.Calculate()
-        return value
+        Ho = self.Calculate()
+        return Ho
 
     def Calculate(self):
         self.table.clear()
-        retStr = ""
-        self.jsonDict["TimeStampCode"] = datetime.datetime.now(ZoneInfo('UTC'))
-        self.jsonDict["TimeStampISO"] = str(datetime.datetime.now(ZoneInfo('UTC')))
-        self.jsonDict["Hs"] = self.Hs
 
         index_error = self.index_error / 60
         semi_diameter = self.semi_diameter / 60  # +ve Lower Limb
 
-        retStr += f"Hs                           {deg_to_dm(self.Hs)}\n"
         self.table.append(["Sextant:", ""])
         self.table.append(["Sextant Altitude (Hs)", f"{deg_to_dm(self.Hs)}"])
+        self.table.append([f"Index Error (On - / Off +)", f"{deg_to_dm(index_error)}"])
 
-        retStr += f"Index Error (On - / Off +)    {deg_to_dm(index_error)}\n"
-        self.table.append(
-         [f"Index Error (On - / Off +)", f"{deg_to_dm(index_error)}"])
-        self.jsonDict["IndexError"] = self.index_error
         Hs = self.Hs + index_error
-        retStr += f"Hs                           {deg_to_dm(Hs)}\n"
         self.table.append(["Observed Altitude", f"{deg_to_dm(Hs)}"])
 
-        self.jsonDict["EyeHeight"] = self.eye_height
         dip_of_horizon = self.dip(self.eye_height)
-        self.jsonDict["Dip"] = self.dip(self.eye_height)
-        retStr += f"Dip at {self.eye_height}m eye height        {deg_to_dm(-dip_of_horizon)}\n"
-        self.table.append(
-         [f"Dip at {self.eye_height}m eye height", f"{deg_to_dm(-dip_of_horizon)}"])
+        self.table.append([f"Dip at {self.eye_height}m eye height", f"{deg_to_dm(-dip_of_horizon)}"])
+
         Hs = Hs - dip_of_horizon
-        retStr += f"                           {deg_to_dm(Hs)}\n"
         self.table.append(["Apparent Altitude", f"{deg_to_dm(Hs)}"])
 
-        refraction_correction = self.bennett(Hs)
+        refraction_correction = self.atmospheric_refraction_bennett(Hs)
+        self.table.append([f"Refraction at {deg_to_dm(Hs)}", f"{deg_to_dm(-refraction_correction)}"])
 
-        retStr += f"Refraction at {deg_to_dm(Hs)}      {deg_to_dm(-refraction_correction)}\n"
-        self.jsonDict["RefractionCorrection"] = refraction_correction
-        self.table.append(
-         [f"Refraction at {deg_to_dm(Hs)}", f"{deg_to_dm(-refraction_correction)}"])
         Hs = Hs - refraction_correction
         self.table.append(["Apparent Altitude", f"{deg_to_dm(Hs)}"])
-        retStr += f"Semi-diameter                 {deg_to_dm(semi_diameter)}\n"
-        self.jsonDict["Semi-diameter (Almanac)"] = self.semi_diameter
-        if self.semi_diameter != 0:
+
+        if self.semi_diameter != 0: # Not a star
             self.table.append([f"Semi-diameter (Almanac)", f"{deg_to_dm(semi_diameter)}"])
             Hs = Hs + self.semi_diameter / 60
-            retStr += f"Hs                           {deg_to_dm(Hs)}\n"
-            #self.table.append(["Hs", f"{deg_to_dm(Hs)}"])
+
         Ho = Hs
-        retStr += f"Ho                           {deg_to_dm(Ho)}\n"
-        self.jsonDict["Ho"] = Ho
-        retStr += f"Ho decimal degrees           {Ho:0.6f}\n"
         self.table.append(["Height Observed (Ho)", f"{deg_to_dm(Ho)}"])
-        #self.table.append(["Ho as decimal",str(Ho)])
-        return Ho, retStr
+        return Ho
 
 
 if __name__ == '__main__':
@@ -152,8 +92,9 @@ if __name__ == '__main__':
     freib.Calculate()
     print(f"Sextant example output.")
     print(f"Dip is 1.76 * sqrt(eye_height_meters) / 60")
-    print(
-     f"Refraction is Bennett's formula https://en.wikipedia.org/wiki/Atmospheric_refraction"
-    )
+    print(f"Refraction is Bennett's formula https://en.wikipedia.org/wiki/Atmospheric_refraction")
+
+    column0_width = max(len(str(row[0])) for row in freib.table)
+    column1_width = max(len(str(row[1])) for row in freib.table)
     for row in freib.table:
-        print(row[0].ljust(28), row[1].rjust(12))
+        print(f"{row[0]:<{column0_width}}  {row[1]:>{column1_width}}")
