@@ -1,14 +1,25 @@
 import datetime
 import math
-from zoneinfo import ZoneInfo
 
 import sextant
 
+class AstroCalcs(object):
 
-class AstroCalculator(object):
+    @staticmethod
+    def help():
+        return "Class AstroCalculator(object), @staticmethod astronomical functions for navigation."
 
-    def __str__(self):
-        return "Class AstroCalculator(object), astronomical functions for navigation."
+    @staticmethod
+    def utc():
+        return datetime.datetime.now(datetime.timezone.utc)  # ZoneInfo('UTC'))
+
+    @staticmethod
+    def now():
+        return AstroCalcs.utc()
+
+    @staticmethod
+    def deg_to_ra(deg) -> float:
+        return (deg % 360) / 15.0
 
     @staticmethod
     def julian_day(dt):
@@ -39,10 +50,11 @@ class AstroCalculator(object):
         LST = gst + longitude
         return LST % 360
 
-    def local_sidereal_time_from_dt(self, dt_utc, longitude):
-        jd = self.julian_day(dt_utc)
-        gst = self.greenwich_sidereal_time(jd)
-        lst = self.local_sidereal_time_from_gst(gst, longitude)
+    @staticmethod
+    def local_sidereal_time_from_dt(dt_utc, longitude):
+        jd = AstroCalcs.julian_day(dt_utc)
+        gst = AstroCalcs.greenwich_sidereal_time(jd)
+        lst = AstroCalcs.local_sidereal_time_from_gst(gst, longitude)
         return lst
 
     @staticmethod
@@ -60,23 +72,24 @@ class AstroCalculator(object):
         # Continue calculations in radians, output in degrees:
         if Lat_of_CP > 0:  # North
             # outputTable.append(["Latitude North",""]) # give explanation in output
-            if LHA_of_body > math.pi: # > 180 deg
+            if LHA_of_body > math.pi:  # > 180 deg
                 # outputTable.append([" and LHA_of_body > 180°: Zn = Z",""])
                 Zn = Z
             else:
                 # outputTable.append([" and LHA_of_body < 180°: Zn = 360° - Z",""])
-                Zn = 2*math.pi - Z # 360 deg
+                Zn = 2 * math.pi - Z  # 360 deg
         else:  # South
-            #outputTable.append(["Latitude South", ""])
-            if LHA_of_body > math.pi: # > 180 deg
-                #outputTable.append([" and LHA_of_body > 180°: Zn = 180° - Z", ""])
-                Zn = math.pi - Z # 180
+            # outputTable.append(["Latitude South", ""])
+            if LHA_of_body > math.pi:  # > 180 deg
+                # outputTable.append([" and LHA_of_body > 180°: Zn = 180° - Z", ""])
+                Zn = math.pi - Z  # 180
             else:
-                #outputTable.append([" and LHA_of_body < 180°: Zn = 180° + Z", ""])
-                Zn = math.pi + Z # 180
-        return math.degrees(Hc) % 360, math.degrees(Z) % 360,  math.degrees(Zn) % 360
+                # outputTable.append([" and LHA_of_body < 180°: Zn = 180° + Z", ""])
+                Zn = math.pi + Z  # 180
+        return math.degrees(Hc) % 360, math.degrees(Z) % 360, math.degrees(Zn) % 360
 
-    def earth_rotation_angle(self, dt):
+    @staticmethod
+    def earth_rotation_angle(dt):
         """Earth rotation angle - ERA
         The modern equivalent of Greenwich Sidereal Time (GST), referred to a point called the Celestial Intermediate Origin (CIO) instead of the equinox.
         The CIO is a point defined not by its position but by its motion, and at present lies very close to the prime meridian of the Geocentric Celestial Reference System (within 0.1 arcsec throughout the 21st century).
@@ -85,22 +98,27 @@ class AstroCalculator(object):
         """ERA replaces Greenwich Apparent Sidereal Time (GAST)."""
         """https://astronomy.stackexchange.com/questions/53233/how-is-earths-rotation-angle-era-defined-and-measured"""
         """ERA = 2π(0.7790572732640 + 1.00273781191135448 · Tu) radians, where Tu = (Julian UT1 date - 2451545.0) """
-        JD = self.julian_day(dt)
+        JD = AstroCalcs.julian_day(dt)
         tu = JD - 2451545.0
         return math.degrees(2 * math.pi * (0.7790572732640 + 1.00273781191135448 * tu))
 
 
 if __name__ == '__main__':
-    ac = AstroCalculator()
-    print(ac)
+    print(AstroCalcs.help())
+
+    localLong = 108
+
     print("An example output:")
-    now = datetime.datetime.now(ZoneInfo('UTC'))
+    now = AstroCalcs.now()
     print(f"Now: {now} UTC")
-    jd = ac.julian_day(now)
+    print(AstroCalcs.now())
+    jd = AstroCalcs.julian_day(now)
     print(f"Julian Day: {jd}")
-    gst = ac.greenwich_sidereal_time(jd)
+    gst = AstroCalcs.greenwich_sidereal_time(jd)
     print(f"GST {gst:.2f}°")
     print(f"GST {sextant.deg_to_dm(gst)}")
-    print(f"LST at 08°W: {sextant.deg_to_dm(ac.local_sidereal_time_from_gst(gst, -8))}")
-    era = ac.earth_rotation_angle(now)
+    print(f"GHA of Aires = GST {gst:.2f}")
+    lst = AstroCalcs.local_sidereal_time_from_gst(gst, localLong)
+    print(f"LST at Long {localLong}: {sextant.deg_to_dm(lst)}")
+    era = AstroCalcs.earth_rotation_angle(now)
     print(f"Earth rotation Angle {sextant.deg_to_dm(era % 360)}")

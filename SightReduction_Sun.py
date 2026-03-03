@@ -1,20 +1,20 @@
 import datetime
-from zoneinfo import ZoneInfo
 
-from astroCalculator import AstroCalculator
+
+from astroCalculator import AstroCalcs
 import sextant
 from sextant import deg_to_dm, dm_tup_to_deg
 
-Logging = True
+Logging = True # Whether to create a unique output file as Logs/observation_time.txt
 
 # Chosen Position CP for plotting sheet.
 # You could use your Dead Reckoning position, but plotting might be awkward.
-# If you use your GPS position at time of sight a CP the Intercept will be your observation error.
+# If you use your GPS position at time of sight as your CP, then the Intercept will be your observation error.
 CP_latitude_degrees = 37
 CP_longitude_degrees = -9
 
 # Time of observation. Always UTC. If Time Zone info is omitted it is forced to UTC. Can accept e.g. microsecond=500000
-observation_time = datetime.datetime(year=2025, month=5, day=29, hour=15, minute=19, second=28, tzinfo=ZoneInfo('UTC'))
+observation_time = datetime.datetime(year=2025, month=5, day=29, hour=15, minute=19, second=28, tzinfo=datetime.timezone.utc)
 
 # We need the following information from the Nautical Almanac,
 # available at https://www.thenauticalalmanac.com
@@ -23,7 +23,7 @@ Declination_of_body_at_hour = 21, 43.2  # Almanac. Decl of Observed Body.
 Declination_d_correction_per_hour = 0.4  # Almanac. N.B. sign. -ve 21 June to 21 December for Sun.
 
 # GHA and Decl increments are calculated (GHA at 15°/hr) and (Decl at 'd' *  minutes of time)
-# Enter Sun semi-diameter below
+# Enter Sun semi-diameter from Almanac in the Sextant section below
 
 mySextant = sextant.Sextant()
 mySextant.Hs = 50, 58.1  # Uncorrected sextant reading (degrees , minutes) sign of minutes is ignored
@@ -33,10 +33,10 @@ mySextant.semi_diameter = +15.8  # Almanac. Sun. Minutes of arc. Varies. Negativ
 
 # end of user observation data. Run the program with:  >python3 SightReduction_Sun.py [ >Output.txt ]
 
-if observation_time.tzinfo != ZoneInfo('UTC'):
+if observation_time.tzinfo != datetime.timezone.utc:
     print("Warning - observation_time TZ not was not set to UTC, has now been set to UTC.")
-    print("Put tzinfo=ZoneInfo('UTC') as the last parameter in the observation_time declaration.")
-    observation_time.replace(tzinfo=ZoneInfo('UTC'))
+    print("Fix: Put tzinfo=datetime.timezone.utc as the last parameter in the observation_time declaration.")
+    observation_time.replace(tzinfo=datetime.timezone.utc)
 
 # convert tuples to decimal degrees
 GHA_of_body_at_hour = dm_tup_to_deg(GHA_of_body_at_hour)
@@ -53,12 +53,13 @@ LHA_of_body_degrees = (GHA_of_body_degrees + CP_longitude_degrees + 360) % 360
 Declination_m_increment = observation_time.minute * Declination_d_correction_per_hour / 3600  # specified in minutes of arc
 Declination_of_body_degrees = Declination_of_body_at_hour + Declination_m_increment
 
-Hc, Z, Zn = AstroCalculator.sightReduction(CP_latitude_degrees, Declination_of_body_degrees, LHA_of_body_degrees)  # Z later corrected to Zn
+#ac = AstroCalcs()
+Hc, Z, Zn = AstroCalcs.sightReduction(CP_latitude_degrees, Declination_of_body_degrees, LHA_of_body_degrees)  # Z later corrected to Zn
 
 observed_body = "Sun"
 information_header = f"""Observed Body: {observed_body}
 	Observation time {str(observation_time)[:19]} UTC
-	Calculation time {str(datetime.datetime.now(ZoneInfo('UTC')))[:19]} UTC
+	Calculation time {str(AstroCalcs.now())[:19]} UTC
 	"""
 
 outputTable = [["", ""],
